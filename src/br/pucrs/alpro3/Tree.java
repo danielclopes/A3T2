@@ -1,35 +1,39 @@
+/**
+ * @author Daniel Lopes
+ * @author Eurico Neto
+ * Trabalho 2 de Algoritmos e Programação III: Fundindo Árvores
+ */
+
 package br.pucrs.alpro3;
 
 public class Tree {
-	private Node root, lastEntry;
-	private Node[] arNode;
+	private Node root;
+	private Node[] left, right;
 	private int leaf = 0; // 0-> Lateral, 1-> Central
+	private int d, e, d1, e1;
 
 	public Tree() {
 		root = null;
-		arNode = new Node[6];
-		arNode[1] = new Node();
-		arNode[1].value = 1;
-		arNode[2] = new Node();
-		arNode[2].value = 2;
-		arNode[3] = new Node();
-		arNode[3].value = 3;
-		arNode[4] = new Node();
-		arNode[4].value = 4;
-		arNode[5] = new Node();
-		arNode[5].value = 5;
-
-		addTupla(arNode[1], arNode[2], arNode[3]);
-		addTupla(arNode[2], arNode[4], arNode[5]);
-		//inorderHelper(root);
-		System.out.println("\n");
 	}
 
-	public void addTupla(Node pai, Node filhoLateral, Node filhoCentral) {
-		root = pai;
-		root.center = filhoCentral;
-		root.side = filhoLateral;
-		root = arNode[1];
+	public Tree(int[] entry) {
+		left = new Node[entry[0] + 1];
+		e1 = entry[0];
+		
+		for (int i = 1; i < left.length; i++) {
+			left[i] = new Node();
+			left[i].value = i;
+		}
+		for (int i = 0; i < (left.length - 1) * 3; i += 3) {
+			addTupla(left[entry[i + 1]], left[entry[i + 2]], left[entry[i + 3]]);
+		}
+	}
+
+	public void addTupla(Node parent, Node sideLeaf, Node centerLeaf) {
+		root = parent;
+		root.center = centerLeaf;
+		root.side = sideLeaf;
+		root = left[1];
 	}
 
 	public void add(int value) {
@@ -89,6 +93,7 @@ public class Tree {
 			return " # ";
 		return toString0(node.side) + String.format(" %d ", node.value) + toString0(node.center);
 	}
+
 	/* Caminhamento central livro "Java - Como Programar, Deitel" */
 	private void inorderHelper(Node node) {
 		if (node == null)
