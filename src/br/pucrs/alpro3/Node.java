@@ -1,6 +1,5 @@
 /**
- * @author Daniel Lopes
- * @author Eurico Neto
+ * @author Daniel Lopes e Eurico Neto
  * Trabalho 2 de Algoritmos e Programação III: Fundindo Árvores
  */
 

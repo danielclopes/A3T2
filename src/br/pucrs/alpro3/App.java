@@ -1,6 +1,5 @@
 /**
- * @author Daniel Lopes
- * @author Eurico Neto
+ * @author Daniel Lopes e Eurico Neto
  * Trabalho 2 de Algoritmos e Programação III: Fundindo Árvores
  */
 
@@ -9,17 +8,23 @@ package br.pucrs.alpro3;
 public class App {
 
 	public static void main(String[] args) {
-		// Tree t1 = new Tree();
-		int[] fileC = { 5, 1, 2, 3, 2, 4, 5, 3, 0, 0, 4, 0, 0, 5, 0, 0 };
-		int[] fileD = { 3, 1, 2, 3, 2, 0, 0, 3, 0, 0 };
-		Tree t1 = new Tree(fileC);
-		Tree t2 = new Tree(fileD);
 
-		t1.reportHeight();
-		System.out.println(t1);
+		InputFileReader ifr = new InputFileReader("/home/daniel/F/input/F_14");
 
-		t2.reportHeight();
-		System.out.println(t2);
+		Tree t1 = new Tree(ifr.lTree());
+		Tree t2 = new Tree(ifr.rTree(), 0);
+
+		System.out.println("Total de nodos: " + t1.size());
+		System.out.println();
+
+		System.out.println("Total de nodos: " + t2.size());
+
+		int total = Integer.max(Integer.min(t1.size(), t2.centralSize()), Integer.min(t2.size(), t1.centralSize()));
+		total = t1.size() + t2.size() - total;
+		System.out.println("\nTotal de nodos da fusão: " + total);
+
+		System.out.println("\n\nTotal de nodos: " + (t1.size() + t2.size()));
+		System.out.println("Total de operações: " + (t1.getZ() + t2.getZ()));
 	}
 
 }

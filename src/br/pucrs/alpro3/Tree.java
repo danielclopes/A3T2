@@ -1,6 +1,5 @@
 /**
- * @author Daniel Lopes
- * @author Eurico Neto
+ * @author Daniel Lopes e Eurico Neto
  * Trabalho 2 de Algoritmos e Programação III: Fundindo Árvores
  */
 
@@ -8,54 +7,68 @@ package br.pucrs.alpro3;
 
 public class Tree {
 	private Node root;
-	private Node[] left, right;
-	private int leaf = 0; // 0-> Lateral, 1-> Central
-	private int d, e, d1, e1;
+	private Node[] tree;
+	private static int z;
 
 	public Tree() {
 		root = null;
 	}
 
 	public Tree(int[] entry) {
-		left = new Node[entry[0] + 1];
-		e1 = entry[0];
-		
-		for (int i = 1; i < left.length; i++) {
-			left[i] = new Node();
-			left[i].value = i;
+		z = 0;
+		tree = new Node[entry[0] + 1];
+
+		for (int i = 1; i < tree.length; i++) {
+			tree[i] = new Node();
+			tree[i].value = i;
+			z++;
 		}
-		for (int i = 0; i < (left.length - 1) * 3; i += 3) {
-			addTupla(left[entry[i + 1]], left[entry[i + 2]], left[entry[i + 3]]);
+		for (int i = 0; i < (tree.length - 1) * 3; i += 3) {
+			addTuple(tree[entry[i + 1]], tree[entry[i + 2]], tree[entry[i + 3]]);
+			z++;
 		}
 	}
 
-	public void addTupla(Node parent, Node sideLeaf, Node centerLeaf) {
+	/*
+	 * Esse construtor serve apenas para a árvore direita pois nesse arranjo
+	 * haverá diferença se os nodes forem inseridos invertidos.
+	 */
+	public Tree(int[] entry, int d) {
+		z = 0;
+		tree = new Node[entry[0] + 1];
+
+		for (int i = 1; i < tree.length; i++) {
+			tree[i] = new Node();
+			tree[i].value = i;
+			z++;
+		}
+		for (int i = 0; i < (tree.length - 1) * 3; i += 3) {
+			addTuple(tree[entry[i + 1]], tree[entry[i + 3]], tree[entry[i + 2]]);
+			z++;
+		}
+	}
+
+	/*
+	 * Adiciona os nodos na sequencia pai, filho lateral e filho central.
+	 */
+	private void addTuple(Node parent, Node sideLeaf, Node centerLeaf) {
 		root = parent;
 		root.center = centerLeaf;
 		root.side = sideLeaf;
-		root = left[1];
+		root = tree[1];
 	}
 
-	public void add(int value) {
-		root = add0(root, value);
+	public int centralSize() {
+		int a = centralSize0(root), b = centralSize0(root.side);
+		if (a > b)
+			return a;
+		return b;
 	}
 
-	private Node add0(Node node, int value) {
-		if (node == null) {
-			Node n = new Node();
-			n.value = value;
-			n.center = null;
-			n.side = null;
-			return n;
-		}
-		if (leaf == 0) {
-			node.center = add0(node.center, value);
-			leaf = 1;
-		} else {
-			node.side = add0(node.side, value);
-			leaf = 0;
-		}
-		return node;
+	private int centralSize0(Node n) {
+		if (n == null)
+			return 0;
+		return 1 + centralSize0(n.center);
 	}
 
 	public int size() {
@@ -84,6 +97,10 @@ public class Tree {
 		return height;
 	}
 
+	public int getZ() {
+		return z;
+	}
+
 	public String toString() {
 		return toString0(root);
 	}
@@ -93,14 +110,4 @@ public class Tree {
 			return " # ";
 		return toString0(node.side) + String.format(" %d ", node.value) + toString0(node.center);
 	}
-
-	/* Caminhamento central livro "Java - Como Programar, Deitel" */
-	private void inorderHelper(Node node) {
-		if (node == null)
-			return;
-		inorderHelper(node.side); // percorre subárvore esquerda
-		System.out.printf("%s ", node.value); // gera saída de dados do nó
-		inorderHelper(node.center); // percorre subárvore direita
-	}
-
 }
